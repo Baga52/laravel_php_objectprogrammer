@@ -1,7 +1,3 @@
-<?php
-// Устанавливаем кодировку
-header('Content-Type: text/html; charset=utf-8');
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -25,6 +21,18 @@ header('Content-Type: text/html; charset=utf-8');
 
     <main class="container">
         <h1>Добро пожаловать на главную страницу!</h1>
+
+        
+    <div>
+        @foreach ($array as $item)
+            <div>
+            <img src="{{
+            Vite::asset('resources/images/'.$item['path']) }}" alt="{{ $item['title'] }}">
+            <h3>{{ $item['title'] }}</h3>
+            <p>{{ $item['price'] }} &#8381;</p>
+            </div>
+        @endforeach
+    </div>
         
         <img src="{{ Vite::asset('resources/images/cat1.jpg') }}" alt="">
         

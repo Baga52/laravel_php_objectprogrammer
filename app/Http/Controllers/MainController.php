@@ -14,10 +14,10 @@ public function showIndex()
 
 public function showArray()
 {
-    $array = [
+$array = [
 ['id' => 1, 'title' => 'продукт 1', 'price' => 500, 'path' => 'cat1.jpg'],
 ['id' => 2, 'title' => 'продукт 2', 'price' => 1500, 'path' => 'cat2.jpg'],
-
 ];
+return view('array', compact('array'));
 }
 }
