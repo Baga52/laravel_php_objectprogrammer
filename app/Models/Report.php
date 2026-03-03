@@ -9,8 +9,5 @@ class Report extends Model
 {
     use SoftDeletes;
     
-    protected $fillable = [
-        'car_number',
-        'description',
-    ];
+    protected $guarded = [];
 }
