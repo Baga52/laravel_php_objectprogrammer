@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@tailwind utilities;
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -16,9 +16,9 @@
 
 
 
-/* @custom-variant dark (@media(prefers-color-scheme: dark));
+@custom-variant dark (@media(prefers-color-scheme: dark));
 
 @theme {
     --color-main: #00fcf4;
     --color-accent: #fc5400;
-} */
+}
