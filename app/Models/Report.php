@@ -12,8 +12,16 @@ class Report extends Model
     use SoftDeletes, HasFactory;
     
     protected $guarded = [];
+    
+    // Отношение к статусу
     public function status(): BelongsTo
     {
-        return $this -> belongsTo(Status::class);
+        return $this->belongsTo(Status::class);
+    }
+    
+    // Отношение к пользователю (добавлено)
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

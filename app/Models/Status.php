@@ -11,4 +11,11 @@ class Status extends Model
     {
         return $this -> hasMany(Report::class);
     }
+    public function index()
+    {
+        $reports = Report::with(['user', 'status'])->get();
+        $statuses = Status::all();
+
+        return view('admin.index', compact('reports', 'statuses'));
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\Status;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
@@ -78,18 +79,15 @@ class ReportController extends Controller
             abort(403, 'У вас нет прав на редактирование этой записи.');
         }
     }
+
+    public function statusUpdate(Request $request, Report $report)
+{
+    $request->validate([
+        'status_id' => 'required|exists:statuses,id',
+    ]);
     
-    public function update(Request $request, Report $report)
-    {
-        if (FacadesAuth::user()->id !== $report->user_id) {
-        abort(403, 'У вас нет прав на редактирование этой записи.');
-    }
-        $data = $request->validate([
-            'car_number' => 'required',
-            'description' => 'required',
-        ]);
-        $report->update($data);
-        
-        return redirect()->route('reports.index');
-    }
+    $report->update($request->only(['status_id']));
+    
+    return redirect()->back();
+}
 }
