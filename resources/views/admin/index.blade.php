@@ -32,21 +32,31 @@
                     </div>
 
                     <div class="col-span-3">
-                        <form class="status-form" action="{{ route('reports.status.update', $report->id) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
+                        @if($report->status->name === 'новое')
+                            <form class="status-form" action="{{ route('reports.status.update', $report->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
 
-                            <select name="status_id" id="status_id"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm border p-2 bg-white cursor-pointer">
-                                
-                                @foreach($statuses as $status)
-                                    <option value="{{ $status->id }}" 
-                                        {{ $status->id === $report->status_id ? 'selected' : '' }}>
-                                        {{ $status->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </form>
+                                <select name="status_id" id="status_id"
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm border p-2 bg-white cursor-pointer">
+                                    
+                                    <option value="" disabled selected>Выберите статус...</option>
+                                    
+                                    @foreach($statuses as $status)
+                                        @if($status->name === 'подтверждено' || $status->name === 'отклонено')
+                                            <option value="{{ $status->id }}">
+                                                {{ $status->name }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </form>
+                        @else
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                                {{ $report->status->name === 'подтверждено' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ $report->status->name }}
+                            </span>
+                        @endif
                     </div>
 
                 </div>
