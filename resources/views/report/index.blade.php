@@ -18,6 +18,7 @@
                 class="inline-block bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition mb-8 font-medium shadow-sm">
                 Создать заявление
             </a>
+            <x-filter :sort=$sort :status=$status>
             <div>
                 <span class="text-xl text-green-600 mb-9">Сортировка по дате создания: </span>
                 <a href="{{ route('reports.index', ['sort' => 'desc', 'status' => $status]) }}" class="text-l text-purple-600 mb-6">сначала новые</a>
@@ -33,7 +34,7 @@
                     @endforeach
                 </ul>
             </div>
-
+            </x-filter>
             @foreach($reports as $report)
             <div class="bg-white border border-gray-200 rounded-lg p-6 mb-4 shadow-sm hover:shadow-md transition">
 
