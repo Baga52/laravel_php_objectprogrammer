@@ -14,26 +14,25 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $sort = $request->input('sort');
-        if($sort != 'asc' && $sort != 'desc'){
+        if ($sort != 'asc' && $sort != 'desc') {
             $sort = 'desc';
         }
         $status = $request->input('status');
         $validate = $request->validate([
             'status' => "exists:statuses,id"
         ]);
-        if($validate){
+        if ($validate) {
             $reports = Report::where('status_id', $status)
-            ->where('user_id', FacadesAuth::user()->id)
-            ->orderBy('created_at', $sort)
-            ->paginate(8);
-        }
-        else{
+                ->where('user_id', FacadesAuth::user()->id)
+                ->orderBy('created_at', $sort)
+                ->paginate(8);
+        } else {
             $reports = Report::where('user_id', FacadesAuth::user()->id)
-            ->orderBy('created_at', $sort)
-            ->paginate(8);
+                ->orderBy('created_at', $sort)
+                ->paginate(8);
         }
         $statuses = Status::all();
-        return view('report.index', compact('reports', 'statuses','sort','status'));
+        return view('report.index', compact('reports', 'statuses', 'sort', 'status'));
     }
     public function show(Report $report)
     {
@@ -42,52 +41,66 @@ class ReportController extends Controller
         }
         return view('reports.show', compact('report'));
     }
-    
+
     public function create()
     {
         return view('report.create');
     }
-    
-    public function store(Request $request, Report $report){
-        $data = $request -> validate([
-            'car_number' => 'string',
-            'description' => 'string',
-        ]);
-        $data['user_id'] = FacadesAuth::user()->id;
-        $data['status_id'] = 1;
 
-        $report->create($data);
-        return redirect()->back();
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'car_number' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        $validated['user_id'] = auth()->id();
+        $validated['status_id'] = 1;
+
+        Report::create($validated);
+
+        return redirect()->route('reports.index')
+            ->with('success', 'Заявление успешно создано!');
     }
-    
+
     public function destroy(Report $report)
     {
-        if (FacadesAuth::user()->id !== $report->user_id) {
-        abort(403, 'У вас нет прав на удаление этой записи.');
-    }
         $report->delete();
-        
-        return redirect()->route('reports.index');
+
+        return redirect()->route('reports.index')
+            ->with('success', 'Заявление успешно удалено!');
     }
-    
+
     public function edit(Report $report)
     {
-        if (FacadesAuth::user()->id === $report->user_id){
-        return view('report.edit', compact('report'));
-        }
-        else{
+        if (FacadesAuth::user()->id === $report->user_id) {
+            return view('report.edit', compact('report'));
+        } else {
             abort(403, 'У вас нет прав на редактирование этой записи.');
         }
     }
 
+    public function update(Request $request, Report $report)
+    {
+        $validated = $request->validate([
+            'car_number' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        $report->update($validated);
+
+        return redirect()->route('reports.index')
+            ->with('success', 'Заявление успешно обновлено!');
+    }
     public function statusUpdate(Request $request, Report $report)
-{
-    $request->validate([
-        'status_id' => 'required|exists:statuses,id',
-    ]);
-    
-    $report->update($request->only(['status_id']));
-    
-    return redirect()->back();
-}
+    {
+        $request->validate([
+            'status_id' => 'required|exists:statuses,id',
+        ]);
+
+        $report->update($request->only(['status_id']));
+
+        return redirect()->back()
+            ->with('success', 'Статус изменён!');
+    }
 }

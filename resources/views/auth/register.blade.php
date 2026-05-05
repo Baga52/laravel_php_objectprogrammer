@@ -30,9 +30,9 @@
         </div>
 
         <!-- Tel -->
-        <div class="mt-4">
+        <div>
             <x-input-label for="tel" :value="__('Tel')" />
-            <x-text-input id="tel" class="block mt-1 w-full" type="text" name="tel" :value="old('tel')" required autocomplete="tel" />
+            <x-tel-input id="tel" name="tel" class="block mt-1 w-full" :value="old('tel')" required autofocus placeholder="(999) 999-99-99" />
             <x-input-error :messages="$errors->get('tel')" class="mt-2" />
         </div>
 
