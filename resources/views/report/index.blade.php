@@ -41,6 +41,13 @@
                     {{ $report->status->name }}
                 </x-status>
 
+                @if($report->path_img)
+                <div class="mb-3">
+                    <img src="{{ asset('storage/reports/' . $report->path_img) }}" alt="Фото"
+                        class="w-full h-48 object-cover rounded-lg shadow-sm">
+                </div>
+                @endif
+
                 <div class="flex items-center gap-3 border-t border-gray-100 pt-4">
                     <a href="{{ route('reports.edit', $report->id) }}"
                         class="text-indigo-600 hover:text-indigo-800 text-sm font-medium hover:underline">

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Encoders\WebpEncoder;
 use App\Models\Report;
 use App\Models\Status;
 use App\Models\User;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
@@ -52,7 +55,15 @@ class ReportController extends Controller
         $validated = $request->validate([
             'car_number' => 'required|string|max:255',
             'description' => 'required|string',
+            'path_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
         ]);
+
+        if ($request->hasFile('path_img')) {
+            $file = $request->file('path_img');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('reports', $fileName, 'public');
+            $validated['path_img'] = $fileName;
+        }
 
         $validated['user_id'] = auth()->id();
         $validated['status_id'] = 1;
